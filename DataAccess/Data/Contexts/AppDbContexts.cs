@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Data.Configurations;
+using DataAccess.Models.DepartmentModel;
+using DataAccess.Models.EmployeeModel;
 
 namespace DataAccess.Data.Contexts
 {
@@ -21,5 +23,6 @@ namespace DataAccess.Data.Contexts
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
