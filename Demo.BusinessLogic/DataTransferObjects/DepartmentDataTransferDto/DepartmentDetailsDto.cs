@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Models;
 
-namespace Demo.BusinessLogic.DataTransferObjects
+namespace Demo.BusinessLogic.DataTransferObjects.DepartmentDataTransferDto
 {
     public class DepartmentDetailsDto
     {
@@ -16,7 +16,7 @@ namespace Demo.BusinessLogic.DataTransferObjects
         //    CreatedOn=DateOnly.FromDateTime(department.CreatedOn);
         //    Code = department.Code;
         //    LastModifiedOn=DateOnly.FromDateTime(department.LastModifiedOn);
-            
+
         //}
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
@@ -32,6 +32,8 @@ namespace Demo.BusinessLogic.DataTransferObjects
         public DateOnly LastModifiedOn { get; set; }
 
         public bool IsDeleted { get; set; } //Flag Soft Delete
+
+
     }
 
 }
