@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using DataAccess.Models.EmployeeModel;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
 using Demo.BusinessLogic.DataTransferObjects.DepartmentDataTransferDto;
@@ -12,41 +14,46 @@ using Demo.BusinessLogic.Services.Interfaces;
 
 namespace Demo.BusinessLogic.Services.Classes
 {
-    public class EmployeeService(IEmployeeRepository _employeeRepository) : IEmployeeServices
+    public class EmployeeService(IEmployeeRepository _employeeRepository,IMapper _mapper) : IEmployeeServices
     {
-        public int CreateDepartment(CreatedEmplopyeeDto emplopyeeDto)
+        public int CreateEmployee(CreatedEmplopyeeDto emplopyeeDto)
         {
-            var employees = emplopyeeDto.ToEntity();
+            var employees = _mapper.Map<CreatedEmplopyeeDto,Employee>(emplopyeeDto);
             return _employeeRepository.Add(employees);
         }
 
-        public bool DeleteDepartment(int id)
+        public bool DeleteEmployee(int id)
         {
             var employee = _employeeRepository.GetById(id);
             if (employee is null) return false;
             else
             {
-                int Result = _employeeRepository.Remove(employee);
-                return Result > 0 ? true : false;
+                //int Result = _employeeRepository.Remove(employee);
+                //return Result > 0 ? true : false;
+                employee.IsDeleted = true;
+                return _employeeRepository.Update(employee)>0?true:false;
             }
         }
 
-        public IEnumerable<EmployeeDto> GetAllDepartments()
+        public IEnumerable<EmployeeDto> GetAllEmployees(bool withTracking=false)
         {
-            var employee = _employeeRepository.GetAll();
-            return employee.Select(E => E.ToEmployeeDto());
+            var employee = _employeeRepository.GetAll(withTracking);
+            var employeeDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(employee);
+            return employeeDto;
+            //return employee.Select(E => E.ToEmployeeDto());
         }
 
-        public EmployeeDetailsDto? GetDepartmentById(int id)
+
+        public EmployeeDetailsDto? GetEmployeeById(int id)
         {
             var employee = _employeeRepository.GetById(id);
-            return employee is null ? null : employee.ToEmployeeDetailsDto();
+            return employee is null ? null : _mapper.Map<Employee,EmployeeDetailsDto>(employee);
         }
 
-        public int UpdateDepartment(UpdateEmployeeDto departmentDto)
+        public int UpdateEmployee(UpdateEmployeeDto employeeDto)
         {
-            var employees = departmentDto.ToEntity();
-            return _employeeRepository.Update(employees);
+            //var employees = employeeDto.ToEntity();
+            return _employeeRepository.Update(_mapper.Map<UpdateEmployeeDto,Employee>(employeeDto));
         }
     }
 }

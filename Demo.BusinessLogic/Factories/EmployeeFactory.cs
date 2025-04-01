@@ -14,12 +14,14 @@ namespace Demo.BusinessLogic.Factories
         {
             return new EmployeeDto
             {
-                Name = e.Name,
                 Email = e.Email,
-                PhoneNumber = e.PhoneNumber,
-                HiringDate = DateOnly.FromDateTime(e.HiringDate),
-                Gender = e.Gender,
-                EmployeeType = e.EmployeeType
+                Name = e.Name,
+                Id = e.Id,
+                Age = e.Age,
+                Salary = e.Salary,
+                IsActive = e.IsActive,
+                EmpGender=e.Gender.ToString(),
+                EmpType=e.EmployeeType.ToString(),
 
             };
         }
@@ -29,20 +31,19 @@ namespace Demo.BusinessLogic.Factories
             {
                 Id = e.Id,
                 Name = e.Name,
-                EmployeeType = e.EmployeeType,
-                Gender = e.Gender,
                 CreatedBy = e.CreatedBy,
-                CreatedOn = DateOnly.FromDateTime(e.CreatedOn),
                 LastModifiedBy = e.LastModifiedBy,
-                LastModifiedOn = DateOnly.FromDateTime(e.LastModifiedOn),
-                IsDeleted = e.IsDeleted,
                 Age = e.Age,
                 Address = e.Address,
                 Salary = e.Salary,
                 IsActive = e.IsActive,
                 Email = e.Email,
                 PhoneNumber = e.PhoneNumber,
-                HiringDate = DateOnly.FromDateTime(e.HiringDate)
+                HiringDate = DateOnly.FromDateTime(e.HiringDate),
+                Gender=e.Gender.ToString(),
+                EmployeeType = e.EmployeeType.ToString(),
+                CreatedOn = e.CreatedOn,
+                LastModifiedOn = e.LastModifiedOn
 
             };
         }
@@ -56,6 +57,12 @@ namespace Demo.BusinessLogic.Factories
                 Gender = createdEmplopyeeDto.Gender,
                 EmployeeType = createdEmplopyeeDto.EmployeeType,
                 HiringDate = createdEmplopyeeDto.HiringDate.ToDateTime(new TimeOnly()),
+                IsActive = createdEmplopyeeDto.IsActive,
+                Salary = createdEmplopyeeDto.Salary,
+                PhoneNumber = createdEmplopyeeDto.PhoneNumber,
+                Address = createdEmplopyeeDto.Address,
+                Age = (int)createdEmplopyeeDto.Age!.Value
+
 
             };
         }
@@ -68,8 +75,12 @@ namespace Demo.BusinessLogic.Factories
                 Gender = updateEmployeeDto.Gender,
                 EmployeeType = updateEmployeeDto.EmployeeType,
                 HiringDate = updateEmployeeDto.HiringDate.ToDateTime(new TimeOnly()),
-                Id = updateEmployeeDto.Id
-
+                Id = updateEmployeeDto.Id,
+                IsActive = updateEmployeeDto.IsActive,
+                Salary = updateEmployeeDto.Salary,
+                PhoneNumber = updateEmployeeDto.PhoneNumber,
+                Address = updateEmployeeDto.Address,
+                Age = (int)updateEmployeeDto.Age!.Value
             };
         }
 

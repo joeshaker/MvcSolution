@@ -1,6 +1,7 @@
 using DataAccess.Data.Contexts;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
+using Demo.BusinessLogic.Profiles;
 using Demo.BusinessLogic.Services.Classes;
 using Demo.BusinessLogic.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,8 @@ namespace Demo.Presentation
             });
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentService,DepartmentService>();
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
 
             #endregion
 
