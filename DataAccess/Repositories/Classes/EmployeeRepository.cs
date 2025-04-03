@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories.Classes
 {
-    internal class EmployeeRepository(AppDbContexts _dbContext) : GenericRepository<Employee>(_dbContext),IEmployeeRepository
+    public class EmployeeRepository(AppDbContexts _dbContext) : GenericRepository<Employee>(_dbContext),IEmployeeRepository
     {
 
     }

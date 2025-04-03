@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess.Data.Contexts;
@@ -19,11 +20,11 @@ namespace DataAccess.Repositories.Classes
         {
             if (WithTracking)
             {
-                return _dbContext.Set<TEntity>().ToList();
+                return _dbContext.Set<TEntity>().Where(e=>e.IsDeleted!=true).ToList();
             }
             else
             {
-                return _dbContext.Set<TEntity>().AsNoTracking().ToList();
+                return _dbContext.Set<TEntity>().Where(e => e.IsDeleted != true).AsNoTracking().ToList();
             }
         }
 
@@ -43,6 +44,12 @@ namespace DataAccess.Repositories.Classes
         {
             _dbContext.Add(entity);
             return _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> selector)
+        {
+            return _dbContext.Set<TEntity>().Where(E=>E.IsDeleted!=true).Select(selector).ToList();
+           
         }
     }
 }
