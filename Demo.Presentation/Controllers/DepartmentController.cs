@@ -41,15 +41,20 @@ namespace Demo.Presentation.Controllers
                         DateOfCreation = createdDepartment.DateOfCreation,
                     };
                     int Result = _departmentService.CreateDepartment(departmentDto);
+                    string Message;
                     if (Result > 0)
                     {
                         //return RedirectToAction("Index");
-                        return RedirectToAction(nameof(Index));
+                        //return RedirectToAction(nameof(Index));
+                        Message = $"Department {createdDepartment.Name} Created Successfully";
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Department not created");
+                        //ModelState.AddModelError(string.Empty, "Department not created");
+                        Message = $"Department {createdDepartment.Name} not Created";
                     }
+                    TempData["Message"] = Message;
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
