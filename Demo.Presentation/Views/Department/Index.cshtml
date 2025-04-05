@@ -1,7 +1,13 @@
 ﻿@model IEnumerable<DepartmentDto>
 @{
     ViewData["Title"] = "Index";
+	var message = ViewData["Message"]as DepartmentDto;
 }
+<div class="alert alert-success">
+	@message.Name
+    <br/>
+	@ViewBag.Message.Name
+</div>
 
 <h1>All Department</h1>
 <a class="btn btn-primary my-3" asp-controller="Department" asp-action="Create">Create New Department</a>
