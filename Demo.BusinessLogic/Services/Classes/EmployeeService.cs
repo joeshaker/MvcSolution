@@ -35,10 +35,21 @@ namespace Demo.BusinessLogic.Services.Classes
             }
         }
 
-        public IEnumerable<EmployeeDto> GetAllEmployees(bool withTracking=false)
+        public IEnumerable<EmployeeDto> GetAllEmployees(string ? EmployeeSearchName)
         {
-            var employee = _employeeRepository.GetAll();
-            var employeeDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(employee);
+            //var employee = _employeeRepository.GetAll(E=>E.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+            //var employeeDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(employee);
+            //return employeeDto;
+            IEnumerable<Employee> employee;
+            if (string.IsNullOrEmpty(EmployeeSearchName))
+            {
+                employee = _employeeRepository.GetAll();
+            }
+            else
+            {
+                employee = _employeeRepository.GetAll(E => E.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+            }
+            var employeeDto = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employee);
             return employeeDto;
             //return employee.Select(E => E.ToEmployeeDto());
         }
