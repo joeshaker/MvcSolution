@@ -103,7 +103,8 @@ namespace Demo.Presentation.Controllers
                 Salary= employee.Salary,
                 Address= employee.Address,
                 Age=employee.Age,
-                IsActive=employee.IsActive
+                IsActive=employee.IsActive,
+                DepartmentId = employee.DepartmentId,
             };
             return View(employeedto);
         }
@@ -126,7 +127,8 @@ namespace Demo.Presentation.Controllers
                     Salary = employeeView.Salary,
                     Address = employeeView.Address,
                     Age = employeeView.Age,
-                    IsActive = employeeView.IsActive
+                    IsActive = employeeView.IsActive,
+                    DepartmentId = employeeView.DepartmentId,
 
                 };
                 var result=_employeeServices.UpdateEmployee(updateEmployee);
