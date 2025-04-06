@@ -11,7 +11,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Demo.Presentation.Controllers
 {
-    public class EmployeeController(IEmployeeServices _employeeServices,IWebHostEnvironment environment,ILogger<Employee> logger) : Controller
+    public class EmployeeController(IEmployeeServices _employeeServices,
+        IWebHostEnvironment environment,
+        ILogger<Employee> logger
+        ) : Controller
     {
         public IActionResult Index()
         {
@@ -19,7 +22,13 @@ namespace Demo.Presentation.Controllers
             return View(Employees);
         }
         #region create
-        public IActionResult Create() =>View();
+        [HttpGet]
+        public IActionResult Create()
+        {
+            //ViewBag.Departments=departmentService.GetAllDepartments();
+            //ViewData["Departments"]=departmentService.GetAllDepartments();
+            return View();
+        }
         [HttpPost]
         public IActionResult Create(EmployeeViewModel employeeView)
         {
@@ -38,7 +47,8 @@ namespace Demo.Presentation.Controllers
                         PhoneNumber = employeeView.PhoneNumber,
                         Gender = employeeView.Gender,
                         EmployeeType = employeeView.EmployeeType,
-                        HiringDate = employeeView.HiringDate
+                        HiringDate = employeeView.HiringDate,
+                        DepartmentId = employeeView.DepartmentId,
                     };
                     int Result = _employeeServices.CreateEmployee(createdEmplopyeeDto);
                     if (Result > 0)
@@ -48,7 +58,7 @@ namespace Demo.Presentation.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Department not created");
+                        ModelState.AddModelError(string.Empty, "Employee not created");
                     }
                 }
                 catch (Exception ex)

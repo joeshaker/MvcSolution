@@ -1,4 +1,18 @@
 ﻿@model EmployeeViewModel
+@inject IDepartmentService departmentService
+@* @{ *@
+@*     var departmentsList = departmentService?.GetAllDepartments(); *@
+@*     var Departments = new SelectList(Enumerable.Empty<DepartmentDto>(), "Id", nameof(DepartmentDto.Name)); *@
+@*     if (departmentService != null && departmentsList != null) *@
+@*     { *@
+@*         Departments = new SelectList(departmentsList, "Id", nameof(DepartmentDto.Name)); *@
+@*     } *@
+@* } *@
+@{
+    var departmentsList = departmentService?.GetAllDepartments() ?? new List<DepartmentDto>();
+    var Departments = new SelectList(departmentsList,"DeptId" ,nameof(DepartmentDto.Name));
+}
+
 <div class="form-group mb-3 col-6">
     <label class="form-label" asp-for="Name"></label>
     <input asp-for="Name" class="form-control" />
@@ -34,10 +48,11 @@
     <input asp-for="Salary" class="form-control" />
     <span asp-validation-for="Salary" class="text-danger"></span>
 </div>
+
 <div class="form-group mb-3 col-6">
     <label class="form-label" asp-for="Gender"></label>
     <div>
-        @foreach (Gender genderOption in Enum.GetValues<Gender>())
+        @foreach (Gender genderOption in Enum.GetValues(typeof(Gender)))
         {
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" asp-for="Gender" value="@genderOption" />
@@ -46,6 +61,14 @@
         }
     </div>
     <span asp-validation-for="Gender" class="text-danger"></span>
+</div>
+<div class="form-group mb-3 col-6">
+    <label class="form-label" asp-for="DepartmentId"></label>
+    <select asp-for="DepartmentId" asp-items="Departments"
+            class="form-control">
+        <option value="">Choose Department</option>
+    </select>
+    <span asp-validation-for="DepartmentId" class="text-danger"></span>
 </div>
 <div class="form-group mb-3 col-6">
     <label class="form-label" asp-for="EmployeeType"></label>
