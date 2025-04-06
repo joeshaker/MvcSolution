@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataAccess.Models.EmployeeModel;
+﻿using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.Shared.Enums;
+using System.ComponentModel.DataAnnotations;
 
-namespace Demo.BusinessLogic.DataTransferObjects.EmployeDataTransferDto
+namespace Demo.Presentation.Views.EmployeeViewModel
 {
-    public class UpdateEmployeeDto
+    public class EmployeeViewModel
     {
         public int Id { get; set; }
         [Required]
@@ -34,7 +29,7 @@ namespace Demo.BusinessLogic.DataTransferObjects.EmployeDataTransferDto
         public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        [Display(Name ="Department")]
         public int? DepartmentId { get; set; }
-
     }
 }
