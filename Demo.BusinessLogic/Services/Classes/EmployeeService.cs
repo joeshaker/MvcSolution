@@ -10,11 +10,13 @@ using DataAccess.Repositories.Interfaces;
 using Demo.BusinessLogic.DataTransferObjects.DepartmentDataTransferDto;
 using Demo.BusinessLogic.DataTransferObjects.EmployeDataTransferDto;
 using Demo.BusinessLogic.Factories;
+using Demo.BusinessLogic.Services.AttatchmentServices;
 using Demo.BusinessLogic.Services.Interfaces;
 
 namespace Demo.BusinessLogic.Services.Classes
 {
-    public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper) : IEmployeeServices
+    public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper,
+        IAttatchmentService attatchmentService) : IEmployeeServices
     {
         public int CreateEmployee(CreatedEmplopyeeDto emplopyeeDto)
         {

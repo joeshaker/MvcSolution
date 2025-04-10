@@ -2,6 +2,7 @@ using DataAccess.Data.Contexts;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
 using Demo.BusinessLogic.Profiles;
+using Demo.BusinessLogic.Services.AttatchmentServices;
 using Demo.BusinessLogic.Services.Classes;
 using Demo.BusinessLogic.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,7 @@ namespace Demo.Presentation
             builder.Services.AddScoped<IEmployeeServices, EmployeeService>();
             builder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAttatchmentService,AttatchmentService>();
 
             #endregion
 
