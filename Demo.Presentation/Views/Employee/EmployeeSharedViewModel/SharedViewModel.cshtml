@@ -10,13 +10,26 @@
 @* } *@
 @{
     var departmentsList = departmentService?.GetAllDepartments() ?? new List<DepartmentDto>();
-    var Departments = new SelectList(departmentsList,"DeptId" ,nameof(DepartmentDto.Name));
+    var Departments = new SelectList(departmentsList, "DeptId", nameof(DepartmentDto.Name));
 }
 
 <div class="form-group mb-3 col-6">
     <label class="form-label" asp-for="Name"></label>
     <input asp-for="Name" class="form-control" />
     <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group mb-3 col-6">
+    <label class="form-label" asp-for="Image">
+    </label>
+    <input asp-for="Image" class="form-control" />
+    <span asp-validation-for="Image" class="text-danger"></span>
+    @if (!string.IsNullOrEmpty(Model.photonName))
+    {
+        <div>
+            <label>Current Image:</label>
+            <img src="~/Files/images/@Model.photonName" alt="Employee Image" style="max-width: 200px; max-height: 200px;" />
+        </div>
+    }
 </div>
 <div class="form-group mb-3 col-6">
     <label class="form-label" asp-for="Email"></label>

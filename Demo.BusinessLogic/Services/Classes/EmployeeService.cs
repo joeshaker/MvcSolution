@@ -10,16 +10,25 @@ using DataAccess.Repositories.Interfaces;
 using Demo.BusinessLogic.DataTransferObjects.DepartmentDataTransferDto;
 using Demo.BusinessLogic.DataTransferObjects.EmployeDataTransferDto;
 using Demo.BusinessLogic.Factories;
+using Demo.BusinessLogic.Services.AttatchmentServices;
 using Demo.BusinessLogic.Services.Interfaces;
 
 namespace Demo.BusinessLogic.Services.Classes
 {
-    public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper) : IEmployeeServices
+    public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper,
+        IAttatchmentService _attatchmentService) : IEmployeeServices
     {
         public int CreateEmployee(CreatedEmplopyeeDto emplopyeeDto)
         {
             var employees = _mapper.Map<CreatedEmplopyeeDto,Employee>(emplopyeeDto);
+
+            if (emplopyeeDto.Image != null) {
+                employees.ImageName = _attatchmentService.Upload(emplopyeeDto.Image, "images");
+
+            }
             _unitOfWork.EmployeeRepository.Add(employees);
+
+
             return _unitOfWork.SaveChanges();
         }
 
@@ -66,7 +75,19 @@ namespace Demo.BusinessLogic.Services.Classes
         public int UpdateEmployee(UpdateEmployeeDto employeeDto)
         {
             //var employees = employeeDto.ToEntity();
-            _unitOfWork.EmployeeRepository.Update(_mapper.Map<UpdateEmployeeDto,Employee>(employeeDto));
+            //if (employeeDto.Image != null)
+            //{
+            var existingEmployee = _unitOfWork.EmployeeRepository.GetById(employeeDto.Id);
+            if (existingEmployee == null) return 0;
+
+            _mapper.Map(employeeDto, existingEmployee);
+
+            if (!string.IsNullOrEmpty(employeeDto.Image))
+            {
+                existingEmployee.ImageName = employeeDto.Image;
+            }
+
+            _unitOfWork.EmployeeRepository.Update(existingEmployee);
             return _unitOfWork.SaveChanges();
         }
     }
