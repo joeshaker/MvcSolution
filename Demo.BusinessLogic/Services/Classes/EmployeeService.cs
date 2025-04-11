@@ -16,12 +16,19 @@ using Demo.BusinessLogic.Services.Interfaces;
 namespace Demo.BusinessLogic.Services.Classes
 {
     public class EmployeeService(IUnitOfWork _unitOfWork,IMapper _mapper,
-        IAttatchmentService attatchmentService) : IEmployeeServices
+        IAttatchmentService _attatchmentService) : IEmployeeServices
     {
         public int CreateEmployee(CreatedEmplopyeeDto emplopyeeDto)
         {
             var employees = _mapper.Map<CreatedEmplopyeeDto,Employee>(emplopyeeDto);
+
+            if (emplopyeeDto.Image != null) {
+                employees.ImageName = _attatchmentService.Upload(emplopyeeDto.Image, "images");
+
+            }
             _unitOfWork.EmployeeRepository.Add(employees);
+
+
             return _unitOfWork.SaveChanges();
         }
 
@@ -68,6 +75,10 @@ namespace Demo.BusinessLogic.Services.Classes
         public int UpdateEmployee(UpdateEmployeeDto employeeDto)
         {
             //var employees = employeeDto.ToEntity();
+            //if (employeeDto.Image != null)
+            //{
+            //    _attatchmentService.Upload(employeeDto.Image, "images");
+            //}
             _unitOfWork.EmployeeRepository.Update(_mapper.Map<UpdateEmployeeDto,Employee>(employeeDto));
             return _unitOfWork.SaveChanges();
         }

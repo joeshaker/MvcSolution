@@ -23,9 +23,9 @@ namespace Demo.BusinessLogic.Services.AttatchmentServices
 
         public string ? Upload(IFormFile file, string FolderName)
         {
-            var extension = Path.GetExtension(file.Name);
+            var extension = Path.GetExtension(file.FileName);
             if (!allowedExtensions.Contains(extension)) return null;
-            if(file.Length==0||file.Length>maxSize) return null;
+            if(file.Length==0 || file.Length > maxSize) return null;
 
             var FolderPath=Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\Files",FolderName);
 

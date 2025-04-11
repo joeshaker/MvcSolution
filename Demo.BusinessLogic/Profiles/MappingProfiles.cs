@@ -24,8 +24,9 @@ namespace Demo.BusinessLogic.Profiles
             CreateMap<Employee, EmployeeDetailsDto>().
                 ForMember(E => E.Gender, Options => Options.MapFrom(src => src.Gender)).
                 ForMember(E => E.EmployeeType, Options => Options.MapFrom(src => src.EmployeeType)).
-                ForMember(E=>E.HiringDate,Options=>Options.MapFrom(src=>DateOnly.FromDateTime(src.HiringDate))).
-                ForMember(E => E.Department, Options => Options.MapFrom(src => src.Department != null ? src.Department.Name : null));
+                ForMember(E => E.HiringDate, Options => Options.MapFrom(src => DateOnly.FromDateTime(src.HiringDate))).
+                ForMember(E => E.Department, Options => Options.MapFrom(src => src.Department != null ? src.Department.Name : null)).
+                ForMember(E => E.Image, Options => Options.MapFrom(src => src.ImageName));
 
             CreateMap<CreatedEmplopyeeDto, Employee>()
                 .ForMember(dest=>dest.HiringDate,Options=>Options.MapFrom(src=>src.HiringDate.ToDateTime(TimeOnly.MinValue))).ReverseMap();

@@ -49,6 +49,7 @@ namespace Demo.Presentation.Controllers
                         EmployeeType = employeeView.EmployeeType,
                         HiringDate = employeeView.HiringDate,
                         DepartmentId = employeeView.DepartmentId,
+                        Image= employeeView.Image,
                     };
                     int Result = _employeeServices.CreateEmployee(createdEmplopyeeDto);
                     if (Result > 0)
@@ -105,6 +106,7 @@ namespace Demo.Presentation.Controllers
                 Age=employee.Age,
                 IsActive=employee.IsActive,
                 DepartmentId = employee.DepartmentId,
+                photonName=employee.Image,
             };
             return View(employeedto);
         }
@@ -129,6 +131,7 @@ namespace Demo.Presentation.Controllers
                     Age = employeeView.Age,
                     IsActive = employeeView.IsActive,
                     DepartmentId = employeeView.DepartmentId,
+                    Image = employeeView.Image
 
                 };
                 var result=_employeeServices.UpdateEmployee(updateEmployee);

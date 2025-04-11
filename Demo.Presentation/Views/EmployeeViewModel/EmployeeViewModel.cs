@@ -1,6 +1,7 @@
 ﻿using DataAccess.Models.EmployeeModel;
 using DataAccess.Models.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace Demo.Presentation.Views.EmployeeViewModel
 {
@@ -31,5 +32,7 @@ namespace Demo.Presentation.Views.EmployeeViewModel
         public EmployeeType EmployeeType { get; set; }
         [Display(Name ="Department")]
         public int? DepartmentId { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? photonName { get; set; }
     }
 }
