@@ -2,6 +2,7 @@
 using DataAccess.Models.Shared.Enums;
 using Demo.BusinessLogic.DataTransferObjects.DepartmentDataTransferDto;
 using Demo.BusinessLogic.DataTransferObjects.EmployeDataTransferDto;
+using Demo.BusinessLogic.Services.AttatchmentServices;
 using Demo.BusinessLogic.Services.Classes;
 using Demo.BusinessLogic.Services.Interfaces;
 using Demo.Presentation.ViewModels;
@@ -13,7 +14,8 @@ namespace Demo.Presentation.Controllers
 {
     public class EmployeeController(IEmployeeServices _employeeServices,
         IWebHostEnvironment environment,
-        ILogger<Employee> logger
+        ILogger<Employee> logger,
+        IAttatchmentService _attatchmentService
         ) : Controller
     {
         public IActionResult Index(string ?EmployeeSearchName)
@@ -25,9 +27,11 @@ namespace Demo.Presentation.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var model = new EmployeeViewModel();
+            return View(model);
             //ViewBag.Departments=departmentService.GetAllDepartments();
             //ViewData["Departments"]=departmentService.GetAllDepartments();
-            return View();
+            //return View();
         }
         [HttpPost]
         public IActionResult Create(EmployeeViewModel employeeView)
@@ -88,35 +92,62 @@ namespace Demo.Presentation.Controllers
         #endregion
         #region Edit
         [HttpGet]
-        public IActionResult Edit(int ?id) {
+        public IActionResult Edit(int? id)
+        {
             if (!id.HasValue) return BadRequest();
-            var employee=_employeeServices.GetEmployeeById(id.Value);
-            if(employee is null) return NotFound();
-            var employeedto = new EmployeeViewModel()
+
+            var employee = _employeeServices.GetEmployeeById(id.Value);
+            if (employee is null) return NotFound();
+
+            var employeeDto = new EmployeeViewModel
             {
                 Id = employee.Id,
-                Name = employee.Name,
-                HiringDate= employee.HiringDate,
-                Email = employee.Email,
-                Gender= Enum.Parse<Gender>(employee.Gender),
-                EmployeeType=Enum.Parse<EmployeeType>(employee.EmployeeType),
-                PhoneNumber= employee.PhoneNumber,
-                Salary= employee.Salary,
-                Address= employee.Address,
-                Age=employee.Age,
-                IsActive=employee.IsActive,
-                DepartmentId = employee.DepartmentId,
-                photonName=employee.Image,
+                Name = employee.Name ?? string.Empty, 
+                HiringDate = employee.HiringDate,
+                Email = employee.Email ?? string.Empty,
+                Gender = !string.IsNullOrEmpty(employee.Gender)
+                       ? Enum.Parse<Gender>(employee.Gender)
+                       : default, 
+                EmployeeType = !string.IsNullOrEmpty(employee.EmployeeType)
+                              ? Enum.Parse<EmployeeType>(employee.EmployeeType)
+                              : default, 
+                PhoneNumber = employee.PhoneNumber ?? string.Empty,
+                Salary = employee.Salary,
+                Address = employee.Address ?? string.Empty,
+                Age = employee.Age ?? default, 
+                IsActive = employee.IsActive,
+                DepartmentId = employee.DepartmentId ?? default, 
+                photonName = employee.Image ?? string.Empty 
             };
-            return View(employeedto);
+
+            return View(employeeDto);
         }
         [HttpPost]
-        public IActionResult Edit([FromRoute] int? id, EmployeeViewModel employeeView) 
+        public IActionResult Edit([FromRoute] int? id, EmployeeViewModel employeeView)
         {
-            if (!id.HasValue|| id!= employeeView.Id) return BadRequest();
-            if(!ModelState.IsValid) return  View(employeeView);
-            try 
+            if (!id.HasValue || id != employeeView.Id) return BadRequest();
+            if (!ModelState.IsValid) return View(employeeView);
+
+            try
             {
+                string? imageName = employeeView.photonName; 
+
+                if (employeeView.Image != null)
+                {
+                    if (!string.IsNullOrEmpty(employeeView.photonName))
+                    {
+                        var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files", "images", employeeView.photonName);
+                        _attatchmentService.Delete(oldImagePath);
+                    }
+
+                    imageName = _attatchmentService.Upload(employeeView.Image, "images");
+                    if (imageName == null)
+                    {
+                        ModelState.AddModelError("Image", "Invalid image file");
+                        return View(employeeView);
+                    }
+                }
+
                 var updateEmployee = new UpdateEmployeeDto()
                 {
                     Id = employeeView.Id,
@@ -131,23 +162,21 @@ namespace Demo.Presentation.Controllers
                     Age = employeeView.Age,
                     IsActive = employeeView.IsActive,
                     DepartmentId = employeeView.DepartmentId,
-                    Image = employeeView.Image
-
+                    Image = imageName 
                 };
-                var result=_employeeServices.UpdateEmployee(updateEmployee);
-                if (result > 0) 
+
+                var result = _employeeServices.UpdateEmployee(updateEmployee);
+                if (result > 0)
                 {
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Employee Can;t be Updated");
-                    return View(updateEmployee);
-
-
+                    ModelState.AddModelError(string.Empty, "Employee Can't be Updated");
+                    return View(employeeView);
                 }
-            } 
-            catch (Exception ex) 
+            }
+            catch (Exception ex)
             {
                 if (environment.IsDevelopment())
                 {
@@ -157,9 +186,8 @@ namespace Demo.Presentation.Controllers
                 else
                 {
                     logger.LogError(ex.Message);
-                    return View("Error View", ex);
+                    return View("ErrorView", ex);
                 }
-
             }
         }
         #endregion

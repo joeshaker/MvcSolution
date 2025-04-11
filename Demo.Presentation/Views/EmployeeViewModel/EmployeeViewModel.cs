@@ -33,6 +33,6 @@ namespace Demo.Presentation.Views.EmployeeViewModel
         [Display(Name ="Department")]
         public int? DepartmentId { get; set; }
         public IFormFile? Image { get; set; }
-        public string? photonName { get; set; }
+        public string? photonName { get; set; } = string.Empty;
     }
 }

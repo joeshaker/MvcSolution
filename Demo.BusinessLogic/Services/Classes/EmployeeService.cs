@@ -77,9 +77,17 @@ namespace Demo.BusinessLogic.Services.Classes
             //var employees = employeeDto.ToEntity();
             //if (employeeDto.Image != null)
             //{
-            //    _attatchmentService.Upload(employeeDto.Image, "images");
-            //}
-            _unitOfWork.EmployeeRepository.Update(_mapper.Map<UpdateEmployeeDto,Employee>(employeeDto));
+            var existingEmployee = _unitOfWork.EmployeeRepository.GetById(employeeDto.Id);
+            if (existingEmployee == null) return 0;
+
+            _mapper.Map(employeeDto, existingEmployee);
+
+            if (!string.IsNullOrEmpty(employeeDto.Image))
+            {
+                existingEmployee.ImageName = employeeDto.Image;
+            }
+
+            _unitOfWork.EmployeeRepository.Update(existingEmployee);
             return _unitOfWork.SaveChanges();
         }
     }

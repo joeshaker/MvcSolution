@@ -36,7 +36,7 @@ namespace Demo.BusinessLogic.DataTransferObjects.EmployeDataTransferDto
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
         public int? DepartmentId { get; set; }
-        public IFormFile ?Image {  get; set; }
+        public string ?Image {  get; set; }
         //public string?ImageName { get; set; }
 
     }

@@ -16,7 +16,8 @@ namespace Demo.BusinessLogic.Profiles
         public MappingProfiles()
         {
             CreateMap<UpdateEmployeeDto, Employee>().
-                ForMember(dest => dest.HiringDate, Options => Options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)));
+                ForMember(dest => dest.HiringDate, Options => Options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue))).
+                ForMember(dest => dest.ImageName, opt => opt.Ignore()); ;
             CreateMap<Employee, EmployeeDto>().
                 ForMember(E => E.EmpGender, Options => Options.MapFrom(src => src.Gender)).
                 ForMember(E => E.EmpType, Options => Options.MapFrom(src => src.EmployeeType)).

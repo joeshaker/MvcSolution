@@ -1,10 +1,12 @@
 using DataAccess.Data.Contexts;
+using DataAccess.Data.IdentityModel;
 using DataAccess.Repositories.Classes;
 using DataAccess.Repositories.Interfaces;
 using Demo.BusinessLogic.Profiles;
 using Demo.BusinessLogic.Services.AttatchmentServices;
 using Demo.BusinessLogic.Services.Classes;
 using Demo.BusinessLogic.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +37,8 @@ namespace Demo.Presentation
             builder.Services.AddAutoMapper(m => m.AddProfile(new MappingProfiles()));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IAttatchmentService,AttatchmentService>();
-
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>().
+                AddEntityFrameworkStores<AppDbContexts>();
             #endregion
 
             var app = builder.Build();
